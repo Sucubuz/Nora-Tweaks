@@ -5,4 +5,6 @@ Nora Tweaks is a custom addon for the [Meteor Client](https://meteorclient.com/)
 ## Features
 
 *   **Custom Category Manager:** Create, manage, and sort your own custom module categories, which appear seamlessly in the module list.
-*   **Auto DirtPath:** Automatically creates paths from dirt-like blocks when holding a shovel.
+*   **Auto Dirt Path:** Automatically creates paths from dirt-like blocks when holding a shovel.
+*   **Chat Utility:** A collection of chat-related tools.
+*   **Hotkey Utility:** Set up quick hotbar changes with key combination.

@@ -4,10 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import me.noramibu.tweaks.NoraTweaks;
 import me.noramibu.tweaks.gui.screens.HotkeysScreen;
 import me.noramibu.tweaks.util.Hotkey;
 import meteordevelopment.meteorclient.MeteorClient;
+import meteordevelopment.meteorclient.events.game.GameLeftEvent;
 import meteordevelopment.meteorclient.events.meteor.KeyEvent;
 import meteordevelopment.meteorclient.events.world.TickEvent;
 import meteordevelopment.meteorclient.gui.GuiTheme;
@@ -16,6 +18,8 @@ import meteordevelopment.meteorclient.gui.widgets.pressable.WButton;
 import meteordevelopment.meteorclient.settings.SettingGroup;
 import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.orbit.EventHandler;
+import net.minecraft.item.ItemStack;
+import net.minecraft.screen.slot.SlotActionType;
 
 import java.io.File;
 import java.io.FileReader;
@@ -62,8 +66,7 @@ public class HotkeyUtility extends Module {
         File file = getHotkeysFile();
         if (file.exists()) {
             try (FileReader reader = new FileReader(file)) {
-                Gson gson = new Gson();
-                JsonArray array = gson.fromJson(reader, JsonArray.class);
+                JsonArray array = new Gson().fromJson(reader, JsonArray.class);
                 if (array != null) {
                     for (int i = 0; i < array.size(); i++) {
                         hotkeys.add(Hotkey.fromJson(array.get(i).getAsJsonObject()));
@@ -82,10 +85,20 @@ public class HotkeyUtility extends Module {
     }
 
     @Override
+    public void onActivate() {
+    }
+
+    @Override
     public void onDeactivate() {
+        saveHotkeys();
         for (Hotkey hotkey : hotkeys) {
             hotkey.resetState();
         }
+    }
+
+    @EventHandler
+    private void onGameLeft(GameLeftEvent event) {
+        saveHotkeys();
     }
 
     @EventHandler
@@ -122,7 +135,34 @@ public class HotkeyUtility extends Module {
                             }
                             break;
                         case HoldItem:
-                            // TODO: Implement inventory search and hold logic
+                            if (mc.player != null) {
+                                for (int i = 0; i < mc.player.getInventory().size(); i++) {
+                                    if (hotkey.matches(mc.player.getInventory().getStack(i))) {
+                                        if (i < 9) { // In hotbar
+                                            mc.player.getInventory().setSelectedSlot(i);
+                                        } else { // In main inventory
+                                            int emptyHotbarSlot = -1;
+                                            for (int j = 0; j < 9; j++) {
+                                                if (mc.player.getInventory().getStack(j).isEmpty()) {
+                                                    emptyHotbarSlot = j;
+                                                    break;
+                                                }
+                                            }
+
+                                            if (emptyHotbarSlot != -1) {
+                                                // Move to empty hotbar slot
+                                                mc.interactionManager.clickSlot(mc.player.playerScreenHandler.syncId, i, emptyHotbarSlot, SlotActionType.SWAP, mc.player);
+                                                mc.player.getInventory().setSelectedSlot(emptyHotbarSlot);
+                                            } else {
+                                                // Hotbar is full, swap with selected slot
+                                                int selectedSlot = mc.player.getInventory().getSelectedSlot();
+                                                mc.interactionManager.clickSlot(mc.player.playerScreenHandler.syncId, i, selectedSlot, SlotActionType.SWAP, mc.player);
+                                            }
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
                             break;
                     }
                     hotkey.resetState();

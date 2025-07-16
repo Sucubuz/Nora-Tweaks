@@ -26,15 +26,6 @@ public class HotkeysScreen extends WindowScreen {
     public void initWidgets() {
         table = add(theme.table()).expandX().widget();
         reload();
-
-        // Container for the add button
-        WHorizontalList bottomList = add(theme.horizontalList()).expandX().widget();
-        WPlus add = bottomList.add(theme.plus()).expandCellX().widget();
-        add.action = () -> {
-            module.hotkeys.add(new Hotkey());
-            module.saveHotkeys();
-            reload();
-        };
     }
 
     public void reload() {
@@ -60,5 +51,13 @@ public class HotkeysScreen extends WindowScreen {
 
             table.row();
         }
+
+        WButton addButton = theme.button("Add");
+        addButton.action = () -> {
+            module.hotkeys.add(new Hotkey());
+            module.saveHotkeys();
+            reload();
+        };
+        table.add(addButton).expandX();
     }
 } 
