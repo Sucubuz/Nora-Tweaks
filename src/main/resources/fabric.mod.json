@@ -1,24 +1,24 @@
 {
   "schemaVersion": 1,
-  "id": "addon-template",
+  "id": "nora-tweaks",
   "version": "${version}",
-  "name": "Addon Template",
-  "description": "An addon template for Meteor Client addons.",
+  "name": "Nora Tweaks",
+  "description": "A tweaks mod for Meteor Client.",
   "authors": [
-    "seasnail"
+    "noramibu"
   ],
   "contact": {
     "sources": "https://github.com/MeteorDevelopment/meteor-addon-template"
   },
-  "icon": "assets/template/icon.png",
+  "icon": "assets/nora-tweaks/icon.png",
   "environment": "client",
   "entrypoints": {
     "meteor": [
-      "com.example.addon.AddonTemplate"
+      "me.noramibu.tweaks.NoraTweaks"
     ]
   },
   "mixins": [
-    "addon-template.mixins.json"
+    "nora-tweaks.mixins.json"
   ],
   "custom": {
     "meteor-client:color": "225,25,25"

@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "me.noramibu.tweaks.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+  ],
+  "client": [
+    "ModulesScreenMixin",
+    "SingleModuleScreenMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
