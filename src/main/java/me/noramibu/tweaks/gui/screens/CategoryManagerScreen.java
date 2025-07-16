@@ -63,6 +63,20 @@ public class CategoryManagerScreen extends WindowScreen {
             WButton renameButton = categoriesTable.add(theme.button("Rename")).widget();
             renameButton.action = () -> MinecraftClient.getInstance().setScreen(new RenameCategoryScreen(theme, category));
 
+            WButton activateButton = categoriesTable.add(theme.button("Activate All")).widget();
+            activateButton.action = () -> {
+                for (meteordevelopment.meteorclient.systems.modules.Module module : CustomCategoryManager.getModules(category)) {
+                    if (!module.isActive()) module.toggle();
+                }
+            };
+
+            WButton deactivateButton = categoriesTable.add(theme.button("Deactivate All")).widget();
+            deactivateButton.action = () -> {
+                for (meteordevelopment.meteorclient.systems.modules.Module module : CustomCategoryManager.getModules(category)) {
+                    if (module.isActive()) module.toggle();
+                }
+            };
+
             WButton deleteButton = categoriesTable.add(theme.button("Delete")).widget();
             deleteButton.action = () -> {
                 CustomCategoryManager.deleteCategory(category);

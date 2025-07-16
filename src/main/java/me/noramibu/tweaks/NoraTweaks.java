@@ -3,6 +3,8 @@ package me.noramibu.tweaks;
 import me.noramibu.tweaks.category.CustomCategoryManager;
 import me.noramibu.tweaks.modules.AutoDirtPath;
 import me.noramibu.tweaks.modules.CategoryManagerModule;
+import me.noramibu.tweaks.modules.ChatUtility;
+import me.noramibu.tweaks.modules.HotkeyUtility;
 import com.mojang.logging.LogUtils;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
 import meteordevelopment.meteorclient.systems.modules.Category;
@@ -15,13 +17,15 @@ public class NoraTweaks extends MeteorAddon {
 
     @Override
     public void onInitialize() {
-        LOG.info("Initializing Nora Tweaks");
+        LOG.info("Initializing Nora's Tweaks");
 
         CustomCategoryManager.init();
 
         // Modules
         Modules.get().add(new AutoDirtPath());
         Modules.get().add(new CategoryManagerModule());
+        Modules.get().add(new ChatUtility());
+        Modules.get().add(new HotkeyUtility());
     }
 
     @Override
