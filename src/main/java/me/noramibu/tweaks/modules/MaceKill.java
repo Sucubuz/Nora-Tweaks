@@ -64,8 +64,10 @@ public class MaceKill extends Module {
         if (!(event.packet instanceof IPlayerInteractEntityC2SPacket packet)) return;
         // Check if this is an attack packet by checking the type
         if (packet.meteor$getEntity() == null) return;
-
-        LivingEntity targetEntity = (LivingEntity) packet.meteor$getEntity();
+        
+        // Only proceed if the target is a LivingEntity
+        if (!(packet.meteor$getEntity() instanceof LivingEntity targetEntity)) return;
+        
         if (packetDisable.get() && (targetEntity.isBlocking() || targetEntity.isInvulnerable() || targetEntity.isInCreativeMode()))
             return;
 
